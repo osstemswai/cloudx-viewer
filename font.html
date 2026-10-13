@@ -4379,7 +4379,7 @@ img, svg { display: block; }
 .handle-v { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; }
 .handle-h { position: absolute; z-index: 5; transform: translate(-50%, -50%); }
 
-@media (max-width: 1279px) {
+@media (width < 1280px) {
   .app { height: auto; min-height: 100vh; }
   .app-body { align-items: stretch; }
   .app-contents { flex-direction: column; }
@@ -4647,7 +4647,7 @@ img, svg { display: block; }
   top: calc((100% - 8px) * var(--m-row-t, 485) / var(--m-row-sum, 928) + 4px); /* 모듈 사이 8px 간격 중앙 */
   transform: translateY(-50%);
 }
-@media (min-width: 1280px) { .handle-v, .handle-h { display: flex; } }
+@media (width >= 1280px) { .handle-v, .handle-h { display: flex; } }
 .m-handle { touch-action: none; }
 .m-handle.rsz[data-orientation="vertical"] { height: 100%; }
 .m-handle.rsz[data-orientation="horizontal"] { width: 100%; }
@@ -4697,7 +4697,7 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 .m-chart-history [hidden] { display: none !important; }
 
 /* 1열 모드(<1280): 최소 900px 높이로 잡고 목록은 모듈 안에서 스크롤 — 브레이크포인트는 layout.css 와 같은 뷰포트 기준 */
-@media (max-width: 1279px) {
+@media (width < 1280px) {
   .m-chart-history { height: 900px; }
 }
 
@@ -4781,6 +4781,8 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 .m-chart-history__chips .tag--selectable[aria-pressed="true"] { padding-inline: 6.79px; }   /* 1.5px 테두리를 안쪽으로 → 폭 그대로 */
 .m-chart-history__selects { flex: none; display: flex; align-items: center; gap: 4px; }
 .m-chart-history .select-wrap.m-chart-history__select { flex: none; width: 90px; }
+/* 맑은 고딕에서만: 「진료내역」(글자 56) 이 90px 안에서 「진료...」로 잘려 첫 셀렉트만 넓힌다 */
+html[data-font-family] .m-chart-history .m-chart-history__selects > .select-wrap.m-chart-history__select:first-child { width: 98px; }
 .m-chart-history .select { padding-inline: 7px; }   /* 피그마는 테두리를 패딩 안쪽으로 그려 글자 영역이 50px */
 .m-chart-history__tools { flex: none; display: flex; align-items: center; gap: 4px; margin-left: auto; }
 .m-chart-history__chips .m-chart-history__more { padding-inline: 8px; }
@@ -5208,6 +5210,8 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
   margin-right: 0; font-size: 12px; line-height: 17px; font-weight: 400; letter-spacing: -0.14px; color: #393939;
 }
 .m-chart-history__card .m-chart-history__fee .m-chart-history__fee-l { min-width: 47.795px; }
+/* 맑은 고딕(글꼴 전환 시)에서만: 맑은 고딕은 글자가 em 칸을 꽉 채워(Pretendard 는 좌우 여백이 있어 0 이어도 떨어져 보임) 「총진료비」가 금액에 붙는다 → 4px 띄움 */
+html[data-font-family] .m-chart-history__card .m-chart-history__fee .m-chart-history__fee-l { margin-right: 4px; }
 .m-chart-history__card .m-chart-history__fee .m-chart-history__fee-v { font-size: 14px; line-height: 20px; font-weight: 700; color: #1d1d1d; }
 .m-chart-history__card .m-chart-history__fee .m-chart-history__fee-red { color: #f03823; }
 @container (max-width: 760px) {
@@ -5815,6 +5819,9 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 }
 .m-chart-input__note:focus-visible { outline: 2px solid var(--color-focus-outline, #eb6100); outline-offset: -1px; }
 .m-chart-input__memo[data-hidden] .m-chart-input__note { -webkit-text-security: disc; }
+/* 낮은 화면(1366×768·1280×720)에서 기본 비율로는 메모 영역이 60~67px 라 노란 칸 아래가 잘렸다 →
+   직접 조절하기 전(기본 상태)에는 도구줄 28 + 간격 10 + 노란 칸 40 = 78px 아래로 줄지 않게 한다. 1920 은 이미 100px 이상이라 그대로. 대응 전(#fixed=1)은 제외 */
+html:not([data-fixed]) .m-chart-input:not([data-mode="memo"]) .m-chart-input__memo:not([data-sized]) { min-height: 78px; }
 
 /* ---------- 좁은 슬롯 ---------- */
 @container (max-width: 520px) {
@@ -5883,7 +5890,7 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 
 /* ---------- 진료입력 간격 (2026-10-06) : 컨테이너 padding 0 14 · gap 8 · #fff 는 이미 Figma 값 ---------- */
 /* 세로 : 탭 줄 → 진찰·자격 줄 → 분류 탭 → 버튼판이 모두 8px. 좁은 폭(한 줄 모드)은 분류 탭이 구분선에 붙는 Figma 모양 그대로 둔다 */
-@container (min-width: 860.02px) {
+@container (width > 860px) {
   .m-chart-input__head { gap: 8px; }
   .m-chart-input__visit, .m-chart-input__next, .m-chart-input__sub { padding-top: 8px; }
 }
@@ -6409,7 +6416,7 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 .m-chart-section__input > * { flex: 1 1 auto; min-width: 0; min-height: 0; }
 
 /* 1열 모드(<1280): 페이지가 스크롤되므로 각 영역이 자기 높이를 갖는다 */
-@media (max-width: 1279px) {
+@media (width < 1280px) {
   .m-chart-section { flex: 0 0 auto; }
   .m-chart-section__xray { flex: 0 0 450px; height: 450px; }
   .m-chart-section__input { flex: 0 0 auto; min-height: 462px; }
@@ -6417,7 +6424,7 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 
 /* 수정 목록 4번(2026-10-06): 좁은 폭에서 진료입력 컨트롤이 한 줄로 줄어든 만큼(약 37px) 사진 쪽에 높이를 준다.
    진료입력의 한 줄 배치는 슬롯 860px 이하(뷰포트 약 1880 미만)에서 켜진다 */
-@media (min-width: 1280px) and (max-width: 1879px) {
+@media (width >= 1280px) and (max-width: 1879px) {
   .m-chart-section__xray { flex: 490 1 0; }
   .m-chart-section__input { flex: 422 1 0; }
 }
@@ -6747,15 +6754,15 @@ html.is-navigating body::before { content: ""; position: fixed; left: 0; right: 
 .m-chart-section__xray { flex: 0 1 auto; height: auto; }
 .m-chart-xray { height: auto; }
 .m-chart-xray__view { flex: 0 1 auto; width: 100%; aspect-ratio: var(--xr-ratio, 946 / 507); }
-@media (min-width: 1280px) {
+@media (width >= 1280px) {
   .m-chart-section__input { flex: 1 1 0; min-height: 120px; }
 }
-@media (max-width: 1279px) {
+@media (width < 1280px) {
   .m-chart-section__xray { flex: 0 0 auto; height: auto; }
 }
 /* 모듈 전체 확대 상태만 기존 방식(칸 크기에 맞춰 contain) 유지 */
 .m-chart-section__xray:has(> .m-chart-xray[data-expanded]) { flex: 450 1 0; }
-@media (max-width: 1279px) {
+@media (width < 1280px) {
   .m-chart-section__xray:has(> .m-chart-xray[data-expanded]) { flex: 0 0 450px; height: 450px; }
 }
 .m-chart-xray[data-expanded] .m-chart-xray__view { flex: 1 1 auto; aspect-ratio: auto; max-height: none; }
@@ -6945,7 +6952,7 @@ html[data-fixed] .m-chart-history__th-h { background: var(--gray-300, #bcbcbc); 
 html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
 /* 대응 후 좁은 카드(2026-10-12 사용자 요청): 정보를 숨기지 말고 아래 줄로 내려 모두 보이게(금액·차트번호·생년월일 유지) */
 @container rsvcard (max-width: 189px) {
-  html:not([data-fixed]) .m-rsv-table__dev > span { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+  html:not([data-fixed]) .m-rsv-table__dev > span { white-space: normal; overflow: visible; overflow-wrap: anywhere; word-break: keep-all; }   /* keep-all: 한글 단어 중간(교정환/자)에서 끊지 않고 띄어쓰기에서 내림. 한 단어도 안 들어갈 때만 anywhere 로 끊김 */
   html:not([data-fixed]) .m-rsv-table__dev [data-p="ch"] { display: block; }
 }
 @container rsvcard (max-width: 149px) {
@@ -6963,7 +6970,7 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
 .scr-chart .col-right { flex: 902 1 0; }
 .scr-chart .slot-chart, .scr-chart .slot-chart-right { flex: 1 1 auto; min-height: 0; display: flex; container-type: inline-size; }
 .scr-chart .slot-chart > *, .scr-chart .slot-chart-right > * { flex: 1 1 auto; min-width: 0; }
-@media (max-width: 1279px) {
+@media (width < 1280px) {
   .scr-chart .col-left, .scr-chart .col-right { flex: 0 0 auto; }
 }
 </style>
@@ -8192,7 +8199,7 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
   /* ---------- matchMedia: 폭·높이 상한(max-*) 질의는 항상 거짓 ---------- */
   var NMM = window.matchMedia && window.matchMedia.bind(window);
   if (NMM) window.matchMedia = function (q) {
-    if (/max-(width|height)/.test(q)) {
+    if (/max-(width|height)|(width|height)\s*<=?/.test(q)) {
       return { matches: false, media: q, onchange: null, addListener: function () {}, removeListener: function () {}, addEventListener: function () {}, removeEventListener: function () {}, dispatchEvent: function () { return false; } };
     }
     return NMM(q);
@@ -8288,7 +8295,7 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
           parent.deleteRule(i);
           for (var k = texts.length - 1; k >= 0; k--) { try { parent.insertRule(texts[k], i); } catch (e) {} }
         } else parent.deleteRule(i);
-      } else if (typeof CSSMediaRule !== "undefined" && r instanceof CSSMediaRule && /max-(width|height)/.test(r.media.mediaText)) {
+      } else if (typeof CSSMediaRule !== "undefined" && r instanceof CSSMediaRule && /max-(width|height)|(width|height)\s*<=?/.test(r.media.mediaText)) {
         parent.deleteRule(i);   // 폭 상한 미디어 쿼리(1열 전환·1280~1879 보정 등)는 1920 에서 꺼져 있으므로 지운다
       } else if (r.cssRules && r.cssRules.length) rewrite(r);
     }
@@ -8614,6 +8621,8 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
         if (insEl && insEl.scrollWidth > insEl.clientWidth + 1) return true;
         var l = leftEl.getBoundingClientRect(), r = rightEl.getBoundingClientRect();
         var sameRow = r.top < l.bottom - 1 && r.bottom > l.top + 1;
+        // 맑은 고딕(글꼴 전환 시)에서만: 글자가 넓어 왼쪽 칩이 줄어든 상자 밖으로 「일반」이 삐져나와 「문진」에 붙는다 → 실제 글자 끝 기준으로도 8px 간격을 확보
+        if (sameRow && insEl && !window.CX_FIXED && document.documentElement.hasAttribute('data-font-family') && insEl.getBoundingClientRect().right + 8 > r.left) return true;
         return sameRow && r.left < l.right + 8;
       };
       fitLinks = function () {
@@ -8688,6 +8697,7 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
       if (input) input.addEventListener('input', fitLinks);
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLinks);
       window.addEventListener('load', fitLinks);
+      if (window.MutationObserver) new MutationObserver(function () { fitLinks(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-font-family'] });   // 글꼴 전환 시 다시 판정
       if (!tb || !tbBtn) return;
 
       // --- 툴팁(DS Tooltip info) ---
@@ -8856,7 +8866,7 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
     var slotP = document.querySelector('.slot-patient'), slotPay = document.querySelector('.slot-payment');
     var hv = document.querySelector('.handle-v .rsz'), hh = document.querySelector('.handle-h .rsz');
     if (!contents || !colL || !colR) return;
-    var mq = window.matchMedia('(max-width: 1279px)');
+    var mq = window.matchMedia('(width < 1280px)');
     var STEP = 16, MIN_W = 480, MIN_H = 160;   // 2026-10-08: 아래(수납) 최소 200 → 160
     var saved = { col: null, row: null };   // 1열 모드로 갔다가 돌아올 때 복원
 
@@ -10671,7 +10681,14 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
         });
       }
       cats.addEventListener('scroll', catNavState);
-      if (window.ResizeObserver) new ResizeObserver(catNavState).observe(row);
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(catNavState);
+        ro.observe(row); ro.observe(cats);
+        Array.prototype.forEach.call(cats.children, function (c) { ro.observe(c); });   // 글꼴 전환·폰트 로드로 탭 글자 폭만 바뀌어도(줄 폭은 그대로) 다시 판정
+      }
+      if (document.fonts) { if (document.fonts.ready) document.fonts.ready.then(catNavState); if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', catNavState); }
+      window.addEventListener('resize', catNavState);   // 글꼴 전환(viewer-bridge 가 resize 를 쏜다)·창 크기
+      if (window.MutationObserver) new MutationObserver(catNavState).observe(document.documentElement, { attributes: true, attributeFilter: ['data-font-family', 'style'] });
       if (window.CX_FIXED) setInterval(catNavState, 400);   // 대응 전은 ResizeObserver 통지를 첫 번만 받으므로(fixed.js) 주기적으로 다시 판정
       catNavState();
     })();
@@ -11933,9 +11950,10 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
       if (window.CX_FIXED) minP = minN = total * 0.2;   // 대응 전 모드: 20% ~ 80%
       p = Math.max(minP, Math.min(total - minN, p)); n = total - p;
       tx.style.flex = p + ' 1 0'; memo.style.flex = n + ' 1 0';   // 비율로 저장 → 창 크기가 바뀌어도 비율 유지
+      memo.setAttribute('data-sized', '');   // 사용자가 직접 조절한 상태 — 기본 최소 높이(메모칸 온전히 보이기) 보정을 풀어 도구줄만 남길 수 있게
       handle.setAttribute('aria-valuenow', Math.round(p / total * 100));
     }
-    function reset() { tx.style.flex = ''; memo.style.flex = ''; handle.setAttribute('aria-valuenow', '75'); }
+    function reset() { tx.style.flex = ''; memo.style.flex = ''; memo.removeAttribute('data-sized'); handle.setAttribute('aria-valuenow', '75'); }
     var startY = 0, s0 = null;
     function move(e) { var y = e.clientY; apply(s0.p + (y - startY), s0.n - (y - startY)); }
     function up(e) {
@@ -12153,7 +12171,7 @@ html[data-fixed] .m-rsv-table__dev > span { text-overflow: clip; }
       var sec = root.closest('.m-chart-section'), hd = sec && sec.querySelector('.m-chart-section__handle');
       if (!hd) return;
       var inputSlot = sec.querySelector('.m-chart-section__input');
-      var MIN_H = 120, MIN_INPUT = 120, STEP = 16, one = window.matchMedia('(max-width: 1279px)');
+      var MIN_H = 120, MIN_INPUT = 120, STEP = 16, one = window.matchMedia('(width < 1280px)');
       function ratio() { var m = /([\d.]+)\s*\/\s*([\d.]+)/.exec(view.style.getPropertyValue('--xr-ratio')); return m ? m[1] / m[2] : 946 / 507; }
       function box() { return view.getBoundingClientRect(); }
       function minH() { return window.CX_FIXED ? sec.getBoundingClientRect().height * 0.2 : MIN_H; }   // 대응 전 모드: 20%
